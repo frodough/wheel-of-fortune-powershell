@@ -1,4 +1,4 @@
-# Wheen of Fortune Powershell Edition
+# Wheel of Fortune Powershell Edition
 
 ## Description
 A simple Wheel of Fortune game written in Powershell
