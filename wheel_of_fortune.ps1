@@ -113,7 +113,9 @@ while ($dword -join "" -ne ($word -join "")) {
     Write-Host "Message: $message`n"
     Write-Host "Category: $randomcat"
     write-host "Spin Value: $($value)"
-    Write-Host "Score: $score`n"
+    Write-Host "Score: $score"
+    Write-Host "Vowels Available: $($vowels -join ", ")"
+    Write-Host "Letters Used: $($used.values -join ", ")`n"
     Write-Host ("*" * 47) -ForegroundColor Cyan
     $response = Read-Host "Press [s]Spin [g]Guess [b]Buy a vowel [r]Solve"
 
@@ -144,6 +146,7 @@ while ($dword -join "" -ne ($word -join "")) {
                 continue
             }
             $score -= 250
+            $vowels = $vowels | ? { $_ -ne $guess }
         } else {
             $message = "You need 250 or more to buy a vowel!"
             continue
@@ -188,7 +191,7 @@ while ($dword -join "" -ne ($word -join "")) {
                 $count++
             }
         }
-        $used[$guess] = $true
+        $used[$guess] = $guess
         if(!($vowels -contains $guess)) { $score += calculateScore $count $spinresult.value }
         $multiResponse = @("Yes there are $($count) $($guess)'s", "Congrats there are $($count) $($guess)'s", "$($count) $($guess)'s", "There are a couple $($guess)'s")
         $singleResponse = @("Yes there is one $($guess)", "One $($guess)", "There is an $($guess)")
@@ -196,7 +199,7 @@ while ($dword -join "" -ne ($word -join "")) {
     } else {
         $response = @("Sorry there are no $($guess)'s", "Nope, no $($guess)'s in this one", "There are no $($guess)'s", "Sorry, try again")
         $message = $response | get-random
-        $used[$guess] = $true
+        $used[$guess] = $guess
     }
 }
 
