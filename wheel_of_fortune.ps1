@@ -33,7 +33,6 @@ function spin {
 function wheelspin {
     param ($spintab)
     $wheelvalue = @("100","200","300","400","500","600","700","800","900","1000","BANKRUPT","LOSE A TURN")
-    $delay = 50
 
     cls
     Write-Host ("=" * 36) -ForegroundColor Yellow
@@ -75,14 +74,17 @@ function wheelspin {
 
     } while ($true)
 
-    for ($t = 0; $t -lt 100; $t++) {
+    $delay = [math]::round(1500 / $currentLength)
+    $spinAmount = [math]::round($currentLength * 2)
+
+    for ($t = 0; $t -lt $spinAmount; $t++) {
         cls
         Write-Host ("=" * 36) -ForegroundColor Yellow
         Write-Host "           Spinning Wheel" -ForegroundColor Yellow
         Write-Host ("=" * 36) -ForegroundColor Yellow
         Write-Host "`n`rWheel Spin: $( $wheelvalue | Get-Random )" -NoNewline
         Start-Sleep -Milliseconds $delay
-        if ($t -ge $delay) { $delay += 5 }
+        if ($t -ge ($spinAmount / 2)) { $delay += 5 }
     }
 
     cls
@@ -100,6 +102,7 @@ function calculateScore {
 
 
 $value = ""
+$userSpin = $false
 
 while ($dword -join "" -ne ($word -join "")) {
     cls
@@ -118,13 +121,16 @@ while ($dword -join "" -ne ($word -join "")) {
         $spinresult = spin
         $value = $spinresult.display
         wheelspin -spintab $spinresult.display
+        $userSpin = $true
 
         if ($spinresult.display -eq "BANKRUPT") {
             $message = "BANKRUPT!! Sorry, better luck next time!"
             $score = 0
+            $userSpin = $false
             continue
         } elseif ($spinresult.display -eq "LOSE A TURN") {
             $message = "Awww, lost a turn! Try again!"
+            $userSpin = $false
             continue
         }
         
@@ -153,18 +159,24 @@ while ($dword -join "" -ne ($word -join "")) {
             continue
         }
     } elseif ($response -eq "g") {
-        $guess = (Read-Host "Enter a consonant").ToUpper()
-
+        if ($userSpin -eq $true) {
+            $guess = (Read-Host "Enter a consonant").ToUpper()
+            $userSpin = $false
+        } else {
+            $message = "You need to spin the wheel first before taking a guess!"
+            continue
+        }
+        
         if ($vowels -contains $guess) {
-            write-host "Vowels need to be bought!"
+            $message = "Vowels need to be bought!"
             sleep -seconds 1
             continue
         }
     }
 
     if ($guess -notmatch "^[A-Z]$") {
-        Write-Host "Enter a valid character!"
-        Start-Sleep -Seconds 2
+        $message = "Enter a valid character!"
+        continue
     } elseif ($used.ContainsKey($guess)) {
         Write-Host "You already used that one!"
         Start-Sleep -Seconds 2
