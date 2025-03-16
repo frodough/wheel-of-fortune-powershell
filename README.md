@@ -9,3 +9,6 @@ A simple Wheel of Fortune game written in Powershell
 - Play three rounds with included bonus round
 - Two player moode is on menu but currently is not emplemented
 - Planning to add two player mode and being able to vs the computer
+
+## How to play
+Put words_categories.csv and the sounds folder in the scripts root directory
