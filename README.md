@@ -7,7 +7,7 @@ A simple Wheel of Fortune game written in Powershell
 - Try to guess from over 1600 puzzles
 - Able to spin the wheel, buy a vowel, solve, and guess the puzzle
 - Play three rounds with included bonus round
-- Two player mode is on menu but currently is not emplemented
+- Two player mode is on menu but currently is not implemented
 - Planning to add two player mode and being able to vs the computer
 
 ## How to play
